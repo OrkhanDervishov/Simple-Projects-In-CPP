@@ -1,1 +1,1 @@
-# Games-in-C-
+# Simple Projects in C
