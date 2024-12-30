@@ -8,7 +8,7 @@
 #define TRUE 1
 #define FALSE 0
 
-#define RECT_SIDE 20
+#define RECT_SIDE 5
 #define RECT_X(x) x/RECT_SIDE*RECT_SIDE
 #define RECT_Y(y) y/RECT_SIDE*RECT_SIDE
 
@@ -25,6 +25,7 @@ typedef struct
 int object_width = SCREEN_HEIGHT/RECT_SIDE;
 int object_height = SCREEN_WIDTH/RECT_SIDE;
 
+// 
 char **screen_map;
 
 SDL_Window *window = NULL;
@@ -96,8 +97,10 @@ void clean_screen(void)
 			screen_map[i][j] = FALSE;
 		}
 	}
+	rect_count = 0;
 }
 
+// Creates and adds rectangle to rects array
 void createRect(int x, int y)
 {
 	SDL_Rect rect = {RECT_X(x), RECT_Y(y), RECT_SIDE, RECT_SIDE};
@@ -105,6 +108,7 @@ void createRect(int x, int y)
 	rects[rect_count++] = rect;
 }
 
+// Draws rectangles from rects array
 void drawRect(void)
 {	
 	SDL_SetRenderDrawColor(renderer, WHITE_COLOR);
@@ -112,6 +116,7 @@ void drawRect(void)
 	SDL_RenderPresent(renderer);
 }
 
+// Processing keyboard and mouse inputs
 void process_input(void)
 {
 	SDL_Event event;
@@ -130,13 +135,12 @@ void process_input(void)
 			else if(event.key.keysym.sym == SDLK_x)
 			{
 				clean_screen();
-				rect_count = 0;
 			}
 			break;
 		case SDL_MOUSEMOTION:
 			int mouse_x = event.motion.x;
 			int mouse_y = event.motion.y;
-			if(event.motion.state != 0)
+			if(event.motion.state != 0 && mouse_x > 0 && mouse_x < SCREEN_WIDTH && mouse_y > 0 && mouse_y < SCREEN_HEIGHT)
 			{
 				if(screen_map[mouse_y/RECT_SIDE][mouse_x/RECT_SIDE] == FALSE)
 				{
@@ -152,7 +156,7 @@ void process_input(void)
 
 void update()
 {
-
+	//TODO: movement
 }
 
 void render(void)
@@ -169,6 +173,7 @@ void render(void)
 	SDL_RenderPresent(renderer);
 }
 
+// Destroy window and renderer, and free allocated memory
 void destroy_window(void)
 {
 	SDL_DestroyRenderer(renderer);
